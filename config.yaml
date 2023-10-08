@@ -1,0 +1,9 @@
+polling_interval_seconds: 5
+http_server:
+  port: 8000
+chargers:
+  - api: local
+    host: wallbox.fritz.box
+controllers:
+  - api: local
+    host: goe-controller.fritz.box

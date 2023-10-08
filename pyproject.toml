@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "goe-prometheus"
+version = "0.1.0"
+description = ""
+authors = ["Michael Helmling <michaelhelmling@posteo.de>"]
+readme = "README.md"
+packages = [
+    { include = "goe_prometheus" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+prometheus-client = "^0.17.1"
+pyyaml = "^6.0.1"
+goe = "^0.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+export = 'goe_prometheus.__main__:run'
