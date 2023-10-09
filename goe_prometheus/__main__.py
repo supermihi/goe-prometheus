@@ -1,5 +1,6 @@
+import logging
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import prometheus_client
@@ -8,9 +9,6 @@ from prometheus_client import start_http_server
 from yaml import Loader
 
 from goe_prometheus.config import parse_config
-
-if __name__ == '__main__':
-    run()
 
 
 def run():
@@ -28,6 +26,16 @@ def run():
     while True:
         now = datetime.utcnow()
         for device in config.devices:
-            device.poll()
+            try:
+                device.poll()
+            except Exception as e:
+                logging.error(e)
         next_poll = now + config.polling_interval
-        time.sleep((next_poll - datetime.utcnow()).total_seconds())
+        wait_interval = next_poll - datetime.utcnow()
+        if wait_interval.total_seconds() < 0:
+            wait_interval = timedelta()
+        time.sleep(wait_interval.total_seconds())
+
+
+if __name__ == '__main__':
+    run()

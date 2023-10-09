@@ -12,7 +12,7 @@ packages = [
 python = "^3.11"
 prometheus-client = "^0.17.1"
 pyyaml = "^6.0.1"
-goe = "^0.1.0"
+goe = "^0.1.1"
 
 [build-system]
 requires = ["poetry-core"]
