@@ -17,6 +17,12 @@ def enum(name: str, documentation: str, states: Sequence[str]) -> Enum:
     return Enum(name, documentation, labelnames=default_labels, states=states)
 
 
+def phase_name(phase_index: int) -> str:
+    return f'L{phase_index + 1}'
+
+
+neutral_name = 'N'
+
 default_labels = [name_label, device_label]
 
 
@@ -37,5 +43,6 @@ class DeviceMetricsBase:
         metric.labels(**self.labels()).state(state)
 
     def set_per_phase(self, metric: Gauge, values: PerPhase | PerPhaseWithN, extra_labels: dict = None):
-        for value, label in zip(values, ('L1', 'L2', 'L3', 'N')):
+        labels = [phase_name(0), phase_name(1), phase_name(2), neutral_name]
+        for value, label in zip(values, labels):
             metric.labels(**self.labels({phase_label: label, **(extra_labels or {})})).set(value or 0)

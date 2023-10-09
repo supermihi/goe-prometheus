@@ -1,6 +1,6 @@
 from goe.controller import GoEControllerClient, SensorValues
 
-from goe_prometheus.util import DeviceMetricsBase, gauge, phase_label
+from goe_prometheus.util import DeviceMetricsBase, gauge, phase_label, phase_name
 
 sensor_name_label = 'sensor_name'
 category_name_label = 'category'
@@ -34,7 +34,7 @@ class ControllerMetrics(DeviceMetricsBase):
         sensors: SensorValues = self.client.get_sensors()
 
         for current_sensor in sensors.currents:
-            labels = {phase_label: current_sensor.phase, sensor_name_label: current_sensor.name}
+            labels = {phase_label: phase_name(current_sensor.phase), sensor_name_label: current_sensor.name}
             self.set(current_sensor_current, current_sensor.current, labels)
             self.set(current_sensor_power, current_sensor.power, labels)
             self.set(current_sensor_power_factor, current_sensor.power_factor, labels)
