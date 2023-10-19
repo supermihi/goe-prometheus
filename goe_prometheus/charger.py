@@ -1,5 +1,5 @@
 from goe.charger import GoEChargerClient, ChargingStatus, Statistics
-from goe.charger.enums import CarState, ModelStatus
+from goe.charger.enums import CarState, ChargingStateDetail, Error
 
 from goe_prometheus.util import gauge, enum, DeviceMetricsBase, phase_label
 
@@ -14,9 +14,13 @@ power_factor = gauge('charging_power_factor', 'current power factor per phase', 
 power_total = gauge('charging_power_total_W', 'current power (in W), total (by API)')
 energy_total = gauge('energy_total_Wh', 'total charged energy, in Wh')
 allowed_to_charge = enum('allowed_to_charge', '', ['yes', 'no'])
+number_of_phases = gauge('number_of_phases', 'number of phases currently used for charging')
 
 car_state = enum('car_state', 'state of connected car', [s.name for s in CarState])
-model_status = enum('model_status', 'charger state', [s.name for s in ModelStatus])
+charging_state = enum('charging_state', 'detailed charging state: why is the device (not) charging right now',
+                      [s.name for s in ChargingStateDetail])
+charging_error = enum('charging_error', 'charging error', [e.name for e in Error])
+power_avg_30s = gauge('power_average_30s', '30s power average (used for next-trip calculation)')
 
 
 class ChargerMetrics(DeviceMetricsBase):
@@ -40,7 +44,11 @@ class ChargerMetrics(DeviceMetricsBase):
         self.set_per_phase(current, energies.current)
         self.set_per_phase(power_factor, energies.power_factor)
         self.set(power_total, energies.power_total)
+        self.set(power_avg_30s, charging.power_average_30s)
+
+        self.state(charging_error, charging.error)
         self.state(car_state, charging.car_state.name)
-        self.state(model_status, charging.status.name)
+        self.state(charging_state, charging.state_detail.name)
+        self.set(number_of_phases, charging.number_of_phases)
 
         self.set(energy_total, statistics.energy_total_wh)
