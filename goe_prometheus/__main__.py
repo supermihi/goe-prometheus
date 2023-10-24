@@ -16,6 +16,7 @@ def run():
     prometheus_client.REGISTRY.unregister(prometheus_client.PLATFORM_COLLECTOR)
     prometheus_client.REGISTRY.unregister(prometheus_client.PROCESS_COLLECTOR)
 
+    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
     with Path('config.yaml').open('rt') as f:
         config_dct = yaml.load(f, Loader=Loader)
     config = parse_config(config_dct)
@@ -29,7 +30,7 @@ def run():
             try:
                 device.poll()
             except Exception as e:
-                logging.error(e)
+                logging.exception(e)
         next_poll = now + config.polling_interval
         wait_interval = next_poll - datetime.utcnow()
         if wait_interval.total_seconds() < 0:
