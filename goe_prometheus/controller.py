@@ -1,3 +1,4 @@
+from goe.components.common import Time
 from goe.controller import GoEControllerClient, SensorValues
 
 from goe_prometheus.util import DeviceMetricsBase, gauge, phase_label, phase_name
@@ -31,7 +32,9 @@ class ControllerMetrics(DeviceMetricsBase):
         self.client = client
 
     def poll(self):
-        sensors: SensorValues = self.client.get_sensors()
+        sensors: SensorValues
+        time: Time
+        sensors, time = self.client.get_many([SensorValues, Time])
 
         for current_sensor in sensors.currents:
             labels = {phase_label: phase_name(current_sensor.phase), sensor_name_label: current_sensor.name}
@@ -49,3 +52,5 @@ class ControllerMetrics(DeviceMetricsBase):
             self.set(category_energy_in, category.energy_in, labels)
             self.set(category_energy_out, category.energy_out, labels)
             self.set_per_phase(category_current, category.current, labels)
+
+        self.set_time(time)

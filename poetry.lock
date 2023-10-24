@@ -2,13 +2,13 @@
 
 [[package]]
 name = "goe"
-version = "0.1.2"
+version = "0.2.0"
 description = "API clients for go-e devices"
 optional = false
 python-versions = ">=3.11,<4.0"
 files = [
-    {file = "goe-0.1.2-py3-none-any.whl", hash = "sha256:499fd9e1f1d4b90896a67055d0bde2c0ca0bfee132227ddba11ddd9b4f7609d2"},
-    {file = "goe-0.1.2.tar.gz", hash = "sha256:503d47b3bddf5fa09d2897e67769e88f5cccc8d670b154172f8a5fe55e1e0fe3"},
+    {file = "goe-0.2.0-py3-none-any.whl", hash = "sha256:3d311c1686508013f89ad37820ecfd163c43e4e55fe2aa75f672f849afa717bc"},
+    {file = "goe-0.2.0.tar.gz", hash = "sha256:ac8354f08897281e88b508dae5e622ce3590005291820be3e5654e1a1615f612"},
 ]
 
 [[package]]
@@ -87,4 +87,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "a4a619f1419622421c8f6d2dc36b222dd9d19c6c7721237f41705b6979097f3d"
+content-hash = "8f5448e44f71542690b740248bae89ab29a400b9cc4f926eba5e9f7683f9906e"

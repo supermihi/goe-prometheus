@@ -1,6 +1,8 @@
+import time
 from collections.abc import Sequence, Iterable
+from datetime import datetime
 
-from goe.components.common import PerPhase, PerPhaseWithN
+from goe.components.common import PerPhase, PerPhaseWithN, Time
 from prometheus_client import Gauge, Enum
 
 device_label = 'device'
@@ -19,6 +21,10 @@ def enum(name: str, documentation: str, states: Sequence[str]) -> Enum:
 
 def phase_name(phase_index: int) -> str:
     return f'L{phase_index + 1}'
+
+
+def to_unix_timestamp(dt: datetime) -> float:
+    return time.mktime(dt.timetuple())
 
 
 neutral_name = 'N'
@@ -46,3 +52,9 @@ class DeviceMetricsBase:
         labels = [phase_name(0), phase_name(1), phase_name(2), neutral_name]
         for value, label in zip(values, labels):
             metric.labels(**self.labels({phase_label: label, **(extra_labels or {})})).set(value or 0)
+
+    def set_time(self, data: Time):
+        from goe_prometheus.common import local_time, utc_time, time_server_status
+        self.set(local_time, to_unix_timestamp(data.local_time))
+        self.set(utc_time, to_unix_timestamp(data.utc_time))
+        self.state(time_server_status, data.time_server_sync_status.name)
