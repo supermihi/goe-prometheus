@@ -7,7 +7,5 @@ It uses the [goe](https://pypi.org/project/goe/) package to query device APIs.
 
 ## Get Started
 
-- clone repository
-- `poetry install`
-- edit `config.yaml` to your needs
-- `poetry run export`
+- create `config.yaml` for your devices (see [checked-in example](./config.yaml))
+- run `pipx run goe-prometheus`
