@@ -31,10 +31,10 @@ class ControllerMetrics(DeviceMetricsBase):
         super().__init__(name, 'controller')
         self.client = client
 
-    def poll(self):
+    def poll(self, **kwargs):
         sensors: SensorValues
         time: Time
-        sensors, time = self.client.get_many([SensorValues, Time])
+        sensors, time = self.client.get_many([SensorValues, Time], **kwargs)
 
         for current_sensor in sensors.currents:
             labels = {phase_label: phase_name(current_sensor.phase), sensor_name_label: current_sensor.name}

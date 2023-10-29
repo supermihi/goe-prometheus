@@ -13,6 +13,7 @@ from goe_prometheus.util import DeviceMetricsBase
 @dataclass
 class ConfigResult:
     polling_interval: timedelta
+    polling_timeout: timedelta | None
     port: int
     devices: list[DeviceMetricsBase]
 
@@ -27,8 +28,10 @@ def create_json_client(config: dict) -> GoEJsonClient:
 
 
 def parse_config(config: dict):
-    polling_interval_s = config.get('polling_interval_seconds', 5)
+    polling_interval_s = config.get('polling', {}).get('interval_seconds', 5)
     polling_interval = timedelta(seconds=polling_interval_s)
+    polling_timeout_s = config.get('polling', {}).get('timeout_seconds')
+    polling_timeout = timedelta(seconds=polling_timeout_s) if polling_timeout_s else None
 
     devices = []
     for charger in config.get('chargers', []):
@@ -42,4 +45,7 @@ def parse_config(config: dict):
         devices.append(ControllerMetrics(GoEControllerClient(client), name))
 
     http_port = config.get('http_server', {}).get('port', 8000)
-    return ConfigResult(polling_interval=polling_interval, devices=devices, port=http_port)
+    return ConfigResult(polling_interval=polling_interval,
+                        polling_timeout=polling_timeout,
+                        devices=devices,
+                        port=http_port)

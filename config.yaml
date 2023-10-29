@@ -1,4 +1,6 @@
-polling_interval_seconds: 5
+polling:
+  interval_seconds: 5
+  timeout_seconds: 3
 http_server:
   port: 8000
 chargers:

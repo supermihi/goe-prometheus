@@ -27,15 +27,15 @@ def run():
     while True:
         now = datetime.utcnow()
         for device in config.devices:
+            logging.info(f'polling {device.name} ...')
             try:
-                device.poll()
+                device.poll(timeout=config.polling_timeout)
             except Exception as e:
                 logging.exception(e)
         next_poll = now + config.polling_interval
         wait_interval = next_poll - datetime.utcnow()
-        if wait_interval.total_seconds() < 0:
-            wait_interval = timedelta()
-        time.sleep(wait_interval.total_seconds())
+        if wait_interval.total_seconds() > 0:
+            time.sleep(wait_interval.total_seconds())
 
 
 if __name__ == '__main__':

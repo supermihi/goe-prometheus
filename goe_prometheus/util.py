@@ -1,5 +1,6 @@
 import time
-from collections.abc import Sequence, Iterable
+from abc import abstractmethod, ABC
+from collections.abc import Sequence
 from datetime import datetime
 
 from goe.components.common import PerPhase, PerPhaseWithN, Time
@@ -32,10 +33,14 @@ neutral_name = 'N'
 default_labels = [name_label, device_label]
 
 
-class DeviceMetricsBase:
+class DeviceMetricsBase(ABC):
     def __init__(self, name: str, device: str):
         self.name = name
         self.device = device
+
+    @abstractmethod
+    def poll(self, **kwargs):
+        raise NotImplementedError()
 
     def labels(self, extra: dict = None):
         return {device_label: self.device, name_label: self.name, **(extra or {})}

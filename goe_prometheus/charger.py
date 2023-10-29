@@ -31,10 +31,10 @@ class ChargerMetrics(DeviceMetricsBase):
         super().__init__(name, 'charger')
         self.client = client
 
-    def poll(self):
+    def poll(self, **kwargs):
         charging: ChargingStatus
         statistics: Statistics
-        charging, statistics, time = self.client.get_many([ChargingStatus, Statistics, Time])
+        charging, statistics, time = self.client.get_many([ChargingStatus, Statistics, Time], **kwargs)
         self.set(allowed_current, charging.allowed_current_now)
         self.set(energy_since_connected, charging.energy_since_connected)
         self.state(allowed_to_charge, 'yes' if charging.allowed_to_charge_now else 'no')
