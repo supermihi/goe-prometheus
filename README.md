@@ -9,3 +9,7 @@ It uses the [goe](https://pypi.org/project/goe/) package to query device APIs.
 
 - create `config.yaml` for your devices (see [checked-in example](./config.yaml))
 - run `pipx run goe-prometheus`
+
+## Development
+- install `uv`
+- run `uv sync`
