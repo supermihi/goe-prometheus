@@ -1,22 +1,25 @@
-[tool.poetry]
+[project]
 name = "goe-prometheus"
 version = "0.2.2"
 description = ""
-authors = ["Michael Helmling <michaelhelmling@posteo.de>"]
+authors = [{ name = "Michael Helmling", email = "michaelhelmling@posteo.de" }]
+requires-python = ">=3.10,<4"
 readme = "README.md"
-packages = [
-    { include = "goe_prometheus" }
+dependencies = [
+    "prometheus-client>=0.17.1,<0.18",
+    "pyyaml>=6.0.1,<7",
+    "goe>=0.2.2,<0.3",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-prometheus-client = "^0.17.1"
-pyyaml = "^6.0.1"
-goe = "^0.2.2"
+[project.scripts]
+export = "goe_prometheus.__main__:run"
+
+[tool.hatch.build.targets.sdist]
+include = ["goe_prometheus"]
+
+[tool.hatch.build.targets.wheel]
+include = ["goe_prometheus"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-export = 'goe_prometheus.__main__:run'
+requires = ["hatchling"]
+build-backend = "hatchling.build"
